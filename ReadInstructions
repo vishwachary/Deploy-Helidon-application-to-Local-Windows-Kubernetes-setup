@@ -1,0 +1,79 @@
+   Created by Vishveswarachary Varanasi, 
+
+    Install Rancher Desktop
+    Next Steps 
+    Commands In General
+
+Install Rancher Desktop
+
+Rancher Desktop comes with Kubernetes built-in — it's a great option if you're looking for a simple way to run Kubernetes locally on Windows, macOS, or Linux
+
+If You're already using version 1.4.1, which is fairly old. The latest version has better WSL handling and bug fixes.
+
+Download latest Rancher Desktop from
+ https://rancherdesktop.io
+
+I have installed the below version
+
+
+Next Steps 
+
+    set the docker context as rancher-desktop
+
+docker context create rancher-desktop --docker "host=npipe:////./pipe/docker_engine"
+docker context use rancher-desktop
+
+    building your Docker image locally with:
+
+docker build -t <image_name>:<image_tag> .
+
+    rancher desktop should listed your images , verify from rancher desktop / images
+
+    To deploy your application to the Kubernetes cluster in Rancher Desktop, use your app.yaml configuration file. By default, Rancher Desktop is set up with a single cluster and a single node, using K3s (a lightweight Kubernetes distribution) to manage the Kubernetes cluster locally on your machine.Since this is a local Kubernetes setup, you can control the number of replicas for your application directly within the app.yaml file. Once your app.yaml is ready,
+
+    run the following command to deploy your application to the Kubernetes cluster:
+
+kubectl apply -f app.yaml
+
+Upon successful execution of the command, you should see the following output:
+service/xxxx created
+ 
+deployment.apps/xxxx created
+
+
+Then, run the following command to see the pods that have been created and are running:
+kubectl get pods
+
+my app.yaml file has configured with type as "NodePort"
+
+spec:
+  type: NodePort
+  selector:
+    app: countryinfoservice
+  ports:
+    - name: tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 30080  
+
+After running kubectl get pods, try accessing the application by navigating to:
+
+http://localhost:30080/<rest_endpoint>
+
+Replace <rest_endpoint> with the appropriate endpoint for your application.
+
+
+Commands In General
+kubectl delete -f app.yaml    [delete all running pods]
+kubectl logs <pod_name>       [read logs of a pod]
+kubectl get pods
+kubectl get nodes
+kubectl apply -f app.yaml     [deployment / service of an application to Kubernetes]
+kubectl  exec -it countryinfoservice-6dcd8cfcf7-w9vdj /bin/bash   [log in to pod]
+ 
+ 
+docker run --rm -p 8080:8080 helidon-country-info:countryinfoservice
+docker images
+docker inspect <image_name>
+docker build -t helidon-country-info:contryinfoservice .
