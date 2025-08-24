@@ -69,7 +69,7 @@ kubectl delete -f app.yaml    [delete all running pods]
 kubectl logs <pod_name>       [read logs of a pod]
 kubectl get pods
 kubectl get nodes
-kubectl apply -f app.yaml     [deployment / service of an application to Kubernetes]
+kubectl apply -f app.yaml     [deployment / service of an application to Kubernetes]   // lets say you changed no of replicas in app.yaml file , then we can directly this command
 kubectl  exec -it countryinfoservice-6dcd8cfcf7-w9vdj /bin/bash   [log in to pod]
  
  
